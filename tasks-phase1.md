@@ -221,8 +221,58 @@ Steps:
   2. Configure it to authenticate and destroy Terraform resources
   3. Test the trigger (schedule or cleanup-tagged PR)
      
-***paste workflow YAML here***
+```
+name: Auto Destroy
+on:
+    schedule:
+      - cron: '0 20 * * *'
+    push:
+        branches:
+        - master
 
-***paste screenshot/log snippet confirming the auto-destroy ran***
+permissions: read-all
+jobs:
+  destroy-release:
+    runs-on: ubuntu-latest
+  # Add "id-token" with the intended permissions.
+    permissions:
+      contents: write
+      id-token: write
+      pull-requests: write
+      issues: write
 
-***write one sentence why scheduling cleanup helps in this workshop***
+    steps:
+    - name: 'Check if commit message does not contain [CLEANUP]'
+      if: github.event_name == 'push'
+      id: check-commit
+      env:
+        COMMIT_MESSAGE: ${{ github.event.head_commit.message }}
+      run: |
+        echo "Commit Message: $COMMIT_MESSAGE"
+        if [[ "$COMMIT_MESSAGE" != *"[CLEANUP]"* ]]; then
+          echo "Commit message does not contain [CLEANUP]. Stopping workflow."
+          exit 1
+        fi
+    - uses: 'actions/checkout@v3'
+    - uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.11.0
+    - id: 'auth'
+      name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v1'
+      with:
+        token_format: 'access_token'
+        workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER_NAME }}
+        service_account: ${{ secrets.GCP_WORKLOAD_IDENTITY_SA_EMAIL }}
+    - name: Terraform Init
+      id: init
+      run: terraform init -backend-config=env/backend.tfvars
+    - name: Terraform Destroy
+      id: destroy
+      run: terraform destroy -no-color -var-file env/project.tfvars -auto-approve
+      continue-on-error: false
+```
+
+![Cleanup Success](doc/figures/cleanup_succ.png)
+
+It helps by making sure we clean up our infra and don't burn thought free credits.
