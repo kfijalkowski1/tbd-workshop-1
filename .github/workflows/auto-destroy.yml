@@ -27,7 +27,7 @@ jobs:
         echo "Commit Message: $COMMIT_MESSAGE"
         if [[ "$COMMIT_MESSAGE" != *"[CLEANUP]"* ]]; then
           echo "Commit message does not contain [CLEANUP]. Stopping workflow."
-          exit 0
+          exit 1
         fi
     - uses: 'actions/checkout@v3'
     - uses: hashicorp/setup-terraform@v2
