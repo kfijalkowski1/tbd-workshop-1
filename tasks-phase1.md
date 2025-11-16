@@ -114,7 +114,6 @@ and open in browser: http://127.0.0.1:1080/cluster
         - BigQuery Data Editor
         - BigQuery User
     2. List of buckets for disposal
-      - tbd-2025z-318652-state
       - tbd-2025z-318652-data
       - tbd-2025z-318652-code
       - tbd-2025z-318652-dataproc-staging
