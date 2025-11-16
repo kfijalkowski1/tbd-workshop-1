@@ -126,7 +126,7 @@ and open in browser: http://127.0.0.1:1080/cluster
 8. Create a new PR and add costs by entering the expected consumption into Infracost
 For all the resources of type: `google_artifact_registry`, `google_storage_bucket`, `google_service_networking_connection`
 create a sample usage profiles and add it to the Infracost task in CI/CD pipeline. Usage file [example](https://github.com/infracost/infracost/blob/master/infracost-usage-example.yml) 
-
+  ```yaml
   google_artifact_registry_repository.my_artifact_registry:
     storage_gb: 50 # Total data stored in the repository in GB
     monthly_egress_data_transfer_gb:
@@ -153,9 +153,9 @@ create a sample usage profiles and add it to the Infracost task in CI/CD pipelin
       asia: 0           # Asia excluding China, but including Hong Kong.
       china: 0            # China excluding Hong Kong.
       australia: 0       # Australia.
-
+  ```
    ***place the screenshot from infracost output here***
-   ![Infracost report](infracost-report.png)
+   ![Infracost report](doc/figures/infracost-report.png)
 
 9. Create a BigQuery dataset and an external table using SQL
     
