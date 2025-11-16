@@ -26,6 +26,7 @@ IMPORTANT ❗ ❗ ❗ Please remember to destroy all the resources after each wo
 
 5. Analyze terraform code. Play with terraform plan, terraform graph to investigate different modules.
 
+    ***describe one selected module and put the output of terraform graph for this module here***
     
     ## Composer module description
     - Creates service account for composer and gives it:
@@ -68,9 +69,6 @@ IMPORTANT ❗ ❗ ❗ Please remember to destroy all the resources after each wo
         "module.composer.google_project_iam_member.composer_agent_service_account" -> "module.composer.data.google_project.project";
     }
     ```
-
-
-    ***describe one selected module and put the output of terraform graph for this module here***
    
 6. Reach YARN UI
    
@@ -102,10 +100,28 @@ and open in browser: http://127.0.0.1:1080/cluster
 
    
 7. Draw an architecture diagram (e.g. in draw.io) that includes:
-    1. Description of the components of service accounts
+    1. Description of the components of service accounts and their roles
+      - tbd-2025z-318652-data@tbd-2025z-318652.iam.gserviceaccount.com
+        - Composer Worker
+        - Dataproc Editor
+        - Service Account User
+      - tbd-2025z-318652-lab@tbd-2025z-318652.iam.gserviceaccount.com
+        - Owner
+      - 797745786903-compute@developer.gserviceaccount.com
+        - Editor
+      - tbd-2025z-318652-dataproc-sa@tbd-2025z-318652.iam.gserviceaccount.com
+        - Dataproc Worker
+        - BigQuery Data Editor
+        - BigQuery User
     2. List of buckets for disposal
-    
+      - tbd-2025z-318652-state
+      - tbd-2025z-318652-data
+      - tbd-2025z-318652-code
+      - tbd-2025z-318652-dataproc-staging
+      - tbd-2025z-318652-dataproc-temp
+
     ***place your diagram here***
+    ![Architecture Diagram](doc/figures/architecture_diagram.png)
 
 8. Create a new PR and add costs by entering the expected consumption into Infracost
 For all the resources of type: `google_artifact_registry`, `google_storage_bucket`, `google_service_networking_connection`
